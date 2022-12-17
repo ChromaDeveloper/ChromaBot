@@ -146,4 +146,4 @@ async def insult(ctx):
 async def purge(ctx, number: int):
     await ctx.channel.purge(limit=number)
 
-bot.run('MTA1MTE4NjIxMDM2Nzg3MzEwNA.G8vUnv.JFqt4Wd-_Q-INDHBRtFlzh1LWfTRvT24dE_MJw')
+bot.run('YOUR TOKEN HERE')
