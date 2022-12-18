@@ -157,4 +157,4 @@ async def unmute(ctx, user: discord.Member):
         await ctx.send(f'`{user}` has been unmuted.')
     else:
         await ctx.send("Oops! You don't have permission to use this command.")
-bot.run('MTA1MTE4NjIxMDM2Nzg3MzEwNA.G4MUCn.ugxj-xTZeAKUlBlrmOmuaLNY_qbBr0NeR5aheo')
+bot.run('Your token here')
