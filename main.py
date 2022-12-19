@@ -5,13 +5,13 @@ import asyncio
 from discord.ext import commands
 import time
 from datetime import datetime
+import requests
 words = ['retarded', 'goofy', 'stupid', 'annoying']
 intents = discord.Intents.all()
 intents.members = True
 intents.guild_messages = True
 intents.guild_reactions = True
 bot = commands.Bot(command_prefix='c!', intents=intents , help_command=None)
-
 warns = []
 @bot.event
 async def on_ready():
@@ -27,7 +27,6 @@ async def warn(ctx, user: discord.Member, *, reason: str):
         await ctx.send(f'`{user}` has been warned. Reason : `{reason}`')
     else:
         await ctx.send("Oops ! You don't have permission to use this command :pensive: !")
-
 @bot.command()
 async def about(ctx, *, message: str = ""):
     embed = discord.Embed(
@@ -39,23 +38,13 @@ async def about(ctx, *, message: str = ""):
     embed.add_field(name='Written in', value='VS-Code', inline=False)
     embed.add_field(name='Made with', value='Python 3.10.8', inline=False)
     embed.add_field(name='Author', value='Chroma#2444', inline=False)
-    embed.add_field(name='Version', value='0.2 BETA', inline=False)
+    embed.add_field(name='Version', value='0.3.2-beta', inline=False)
     await ctx.send(embed=embed)
-    
 @bot.command()
-async def àpropos(ctx, *, message: str = ""):
-    embed = discord.Embed(
-        title='À propos de ChromaBot :flag_fr:',
-        description=message,
-        color=discord.Color.blue()
-    )
-    embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/1053394784900894851/1053651991764664370/frenchaboutlogo.png')
-    embed.add_field(name='Écrit en', value='VS-Code', inline=False)
-    embed.add_field(name='Fait avec', value='Python 3.10.8', inline=False)
-    embed.add_field(name='Auteur', value='Chroma#2444', inline=False)
-    embed.add_field(name='Version', value='0.3 BETA', inline=False)
-    await ctx.send(embed=embed)
-    
+async def profile(ctx, user: discord.Member):
+    avatar_url = user.avatar_url
+    response = requests.get(avatar_url)
+    await ctx.channel.send(file=discord.File(BytesIO(response.content), 'profile.png'))
 @bot.command()
 async def help(ctx, *, message: str = ""):
     embed = discord.Embed(
@@ -114,8 +103,9 @@ async def insult(ctx):
     await ctx.send(f'You are {selected_word}')
 @bot.command()
 @commands.has_permissions(manage_messages=True)
-async def purge(ctx, number: int):
-    await ctx.channel.purge(limit=number)
+async def clear(ctx, number: int):
+        await ctx.channel.purge(limit=number)
+        await ctx.send(f'Cleared {number} message')
 @bot.command()
 async def poll(ctx, *, question: str):
     # Create the poll message and add the question as the title
@@ -157,4 +147,43 @@ async def unmute(ctx, user: discord.Member):
         await ctx.send(f'`{user}` has been unmuted.')
     else:
         await ctx.send("Oops! You don't have permission to use this command.")
+
+@bot.command()
+async def rps(ctx, choice: str):
+    # Generate a random number
+    computer_choice = random.randint(1, 3)
+
+    # Compare the user's choice to the computer's choice
+    if choice.lower() == "rock":
+        if computer_choice == 1:
+            await ctx.send(":rock:")
+            await ctx.send("It's a tie!")
+        elif computer_choice == 2:
+            await ctx.send(":page_facing_up:")
+            await ctx.send("You lose! Paper beats rock.")
+        else:
+            await ctx.send(":scissors:")
+            await ctx.send("You win! Rock beats scissors.")
+    elif choice.lower() == "paper":
+        if computer_choice == 1:
+            await ctx.send(":rock:")
+            await ctx.send("You win! Paper beats rock.")
+        elif computer_choice == 2:
+            await ctx.send(":page_facing_up:")
+            await ctx.send("It's a tie!")
+        else:
+            await ctx.send(":scissors:")
+            await ctx.send("You lose! Scissors beats paper.")
+    elif choice.lower() == "scissors":
+        if computer_choice == 1:
+            await ctx.send(":rock:")
+            await ctx.send("You lose! Rock beats scissors.")
+        elif computer_choice == 2:
+            await ctx.send(":page_facing_up:")
+            await ctx.send("You win! Scissors beats paper.")
+        else:
+            await ctx.send(":scissors:")
+            await ctx.send("It's a tie!")
+    else:
+        await ctx.send("Please choose rock, paper, or scissors.")
 bot.run('Your token here')
