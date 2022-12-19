@@ -38,13 +38,8 @@ async def about(ctx, *, message: str = ""):
     embed.add_field(name='Written in', value='VS-Code', inline=False)
     embed.add_field(name='Made with', value='Python 3.10.8', inline=False)
     embed.add_field(name='Author', value='Chroma#2444', inline=False)
-    embed.add_field(name='Version', value='0.3.2-beta', inline=False)
+    embed.add_field(name='Version', value='0.3.2-alpha', inline=False)
     await ctx.send(embed=embed)
-@bot.command()
-async def profile(ctx, user: discord.Member):
-    avatar_url = user.avatar_url
-    response = requests.get(avatar_url)
-    await ctx.channel.send(file=discord.File(BytesIO(response.content), 'profile.png'))
 @bot.command()
 async def help(ctx, *, message: str = ""):
     embed = discord.Embed(
@@ -60,7 +55,11 @@ async def help(ctx, *, message: str = ""):
     embed.add_field(name='c!removewarn', value='Removes a specific warn for someone in your server. `Usage: c!removewarn [@someone] [warns]`', inline=False)
     embed.add_field(name='c!ping', value='Shows the ping.', inline=False)
     embed.add_field(name='c!insult', value='Literally insults you.', inline=False)
-    embed.add_field(name='c!purge', value='Purges messages in your server. `Usage: c!purge [number of how many messages you want to remove]`', inline=False)  
+    embed.add_field(name='c!poll', value='Makes a poll. `Usage : c!poll [something]`', inline=False)
+    embed.add_field(name='c!clear', value='Clears messages in your server. `Usage: c!purge [number of how many messages you want to remove]`', inline=False)  
+    embed.add_field(name='c!mute', value='Mutes a person in your server. `Usage : c!mute [@someone]`', inline=False)
+    embed.add_field(name='c!unmute', value='Unmutes a person in your server. `Usage : c!unmute [@someone]`', inline=False)
+    embed.add_field(name='c!rps', value='Plays a game of rock, paper, scissors. `Usage : c!rps [rock,paper,scissors]`', inline=False)
     await ctx.send(embed=embed)
     
 @bot.command()
