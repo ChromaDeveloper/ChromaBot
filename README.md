@@ -1,5 +1,5 @@
 # ChromaBot 
-`(Version 0.3.2-beta)`
+`(Version 0.4.1-alpha)`
 
 ## Introduction
 
