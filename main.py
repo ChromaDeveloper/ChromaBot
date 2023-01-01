@@ -189,4 +189,4 @@ async def play(ctx, url):
 @bot.command()
 async def getpfp(ctx, user: discord.User):
     await ctx.send(f"{user.name}'s profile picture: {user.avatar}")
-bot.run('MTA1MTE4NjIxMDM2Nzg3MzEwNA.GBqS9p.it5xpHgSQTELEbO553FOaWC803YvXQ53xf1wXE')
+bot.run('Your moms tokens')
