@@ -5,14 +5,10 @@ import asyncio
 from discord.ext import commands
 import time
 from datetime import datetime
-import requests
-words = ['retarded', 'goofy', 'stupid', 'annoying']
-intents = discord.Intents.all()
-intents.members = True
-intents.guild_messages = True
-intents.guild_reactions = True
+import os
+import subprocess
+intents = discord.Intents().all()
 bot = commands.Bot(command_prefix='c!', intents=intents , help_command=None)
-warns = []
 @bot.event
 async def on_ready():
     print('Logged in as')
@@ -38,7 +34,7 @@ async def about(ctx, *, message: str = ""):
     embed.add_field(name='Written in', value='VS-Code', inline=False)
     embed.add_field(name='Made with', value='Python 3.10.8', inline=False)
     embed.add_field(name='Author', value='Chroma#2444', inline=False)
-    embed.add_field(name='Version', value='0.3.2-alpha', inline=False)
+    embed.add_field(name='Version', value='0.5.1-alpha', inline=False)
     await ctx.send(embed=embed)
 @bot.command()
 async def help(ctx, *, message: str = ""):
@@ -53,13 +49,13 @@ async def help(ctx, *, message: str = ""):
     embed.add_field(name='c!ban', value='Bans someone in your server. `Usage: c!ban [@someone] [reason]`', inline=False)
     embed.add_field(name='c!warn', value='Warns someone in your server. `Usage: c!warn [@someone] [reason]`', inline=False)
     embed.add_field(name='c!removewarn', value='Removes a specific warn for someone in your server. `Usage: c!removewarn [@someone] [warns]`', inline=False)
-    embed.add_field(name='c!ping', value='Shows the ping.', inline=False)
-    embed.add_field(name='c!insult', value='Literally insults you.', inline=False)
+    embed.add_field(name='c!check', value='Checks if the bot is working.', inline=False)
     embed.add_field(name='c!poll', value='Makes a poll. `Usage : c!poll [something]`', inline=False)
     embed.add_field(name='c!clear', value='Clears messages in your server. `Usage: c!purge [number of how many messages you want to remove]`', inline=False)  
     embed.add_field(name='c!mute', value='Mutes a person in your server. `Usage : c!mute [@someone]`', inline=False)
     embed.add_field(name='c!unmute', value='Unmutes a person in your server. `Usage : c!unmute [@someone]`', inline=False)
     embed.add_field(name='c!rps', value='Plays a game of rock, paper, scissors. `Usage : c!rps [rock,paper,scissors]`', inline=False)
+    embed.add_field(name='c!getpfp', value='Gets a profile picture from someone in your server `Usage : c!getpfp [@someone]`', inline=False)
     await ctx.send(embed=embed)
     
 @bot.command()
@@ -90,16 +86,9 @@ async def removewarn(ctx, user: discord.Member):
     else:
         await ctx.send("Oops ! You don't have permission to use this command :pensive: !")
 @bot.command()
-async def ping(ctx):
+async def check(ctx):
     before = time.time()
-    await ctx.send("Pong!")
-    after = time.time()
-    difference = after - before
-    await ctx.send(f"Ping: {difference * 1000:.2f}ms")
-@bot.command()
-async def insult(ctx):
-    selected_word = random.choice(words)
-    await ctx.send(f'You are {selected_word}')
+    await ctx.send("Everything is working fine :white_check_mark:")
 @bot.command()
 @commands.has_permissions(manage_messages=True)
 async def clear(ctx, number: int):
@@ -185,4 +174,19 @@ async def rps(ctx, choice: str):
             await ctx.send("It's a tie!")
     else:
         await ctx.send("Please choose rock, paper, or scissors.")
-bot.run('Your token here')
+@bot.command()
+async def play(ctx, url):
+    # Join the voice channel
+    voice_channel = ctx.message.author.voice.channel
+    voice = await voice_channel.connect()
+
+    # Use youtube-dl to download the audio from the YouTube video
+    subprocess.run(["youtube-dl", "-x", "--audio-format", "mp3", url, "-o", "temp.mp3"])
+
+    # Use FFmpeg to play the downloaded audio file
+    audio_source = discord.FFmpegPCMAudio(source="temp.mp3")
+    voice.play(audio_source)
+@bot.command()
+async def getpfp(ctx, user: discord.User):
+    await ctx.send(f"{user.name}'s profile picture: {user.avatar}")
+bot.run('MTA1MTE4NjIxMDM2Nzg3MzEwNA.GBqS9p.it5xpHgSQTELEbO553FOaWC803YvXQ53xf1wXE')
