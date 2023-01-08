@@ -279,4 +279,4 @@ async def stop(ctx):
     else:
         await ctx.send("You are not in a voice channel.")
     subprocess.run(["rm", "-rf", "yt.mp3"]) 
-bot.run('MTA1MTE4NjIxMDM2Nzg3MzEwNA.GB5Q9x.NcuBhhKKZDx5HzB_ywI2HijVLspfU3xuzGGjO4')
+bot.run('YOUR BOT TOKEN HERE')
